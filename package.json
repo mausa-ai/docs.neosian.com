@@ -1,0 +1,20 @@
+{
+  "name": "docs.neosian.com",
+  "private": true,
+  "type": "module",
+  "description": "docs.neosian.com — the neosian wheel's docs pages and llms.txt, rendered per release",
+  "engines": { "node": ">=22.12.0" },
+  "scripts": {
+    "fetch": "node scripts/fetch-wheel.mjs && node scripts/render.mjs",
+    "dev": "npm run fetch && astro dev",
+    "build": "npm run fetch && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.42.0",
+    "astro": "7.3.2"
+  },
+  "devDependencies": {
+    "wrangler": "4.130.0"
+  }
+}

@@ -1,0 +1,79 @@
+/* neosian brand — one file, identical in docs.neosian.com and neosian.com.
+ * The colours are branding/README.md's maki ladder (accent) with the
+ * limestone neutrals (paper, ink, the dark page); the Starlight tokens are
+ * derived from the same values so the docs and the landing read as one site.
+ * Light on :root, dark under the OS preference and under Starlight's toggle. */
+:root {
+  --paper: #faf7f1;
+  --ink: #17191a;
+  --rule: #e6e2da;
+  --muted: #5c5a54;
+  --accent: #6d6d32;
+  --accent-hover: #59591d;
+  --accent-active: #494807;
+  --accent-subtle: #f4f4d6;
+  --accent-border: #d5d698;
+  --accent-text: #59591d;
+  --support: #806605;
+
+  --sl-color-accent-low: #f4f4d6;
+  --sl-color-accent: #6d6d32;
+  --sl-color-accent-high: #494807;
+  --sl-color-white: #17191a;
+  --sl-color-gray-1: #24262a;
+  --sl-color-gray-2: #3c3b37;
+  --sl-color-gray-3: #5c5a54;
+  --sl-color-gray-4: #8f8c84;
+  --sl-color-gray-5: #c4c0b8;
+  --sl-color-gray-6: #e6e2da;
+  --sl-color-gray-7: #f3f0ea;
+  --sl-color-black: #faf7f1;
+}
+
+:root[data-theme="dark"],
+:root.dark {
+  --paper: #14171a;
+  --ink: #f0ece4;
+  --rule: #3c3b37;
+  --muted: #a9a59c;
+  --accent: #afaf73;
+  --accent-hover: #c5c688;
+  --accent-active: #d5d698;
+  --accent-subtle: #2c2b00;
+  --accent-border: #515013;
+  --accent-text: #c2c285;
+  --support: #c6a850;
+
+  --sl-color-accent-low: #2c2b00;
+  --sl-color-accent: #afaf73;
+  --sl-color-accent-high: #d5d698;
+  --sl-color-white: #f0ece4;
+  --sl-color-gray-1: #e6e2da;
+  --sl-color-gray-2: #c4c0b8;
+  --sl-color-gray-3: #8f8c84;
+  --sl-color-gray-4: #5c5a54;
+  --sl-color-gray-5: #3c3b37;
+  --sl-color-gray-6: #24262a;
+  --sl-color-black: #14171a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14171a;
+    --ink: #f0ece4;
+    --rule: #3c3b37;
+    --muted: #a9a59c;
+    --accent: #afaf73;
+    --accent-hover: #c5c688;
+    --accent-active: #d5d698;
+    --accent-subtle: #2c2b00;
+    --accent-border: #515013;
+    --accent-text: #c2c285;
+    --support: #c6a850;
+  }
+}
+
+/* Starlight: the body keeps the wheel's line length readable. */
+.sl-markdown-content {
+  font-size: var(--sl-text-base);
+}

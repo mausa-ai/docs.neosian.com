@@ -1,0 +1,37 @@
+name: Deploy
+
+# The site's build reads one input — the neosian wheel at the release
+# RELEASE names — and a push to main uploads dist/ to Cloudflare Pages by
+# direct upload. Pull requests build and stop. The token is scoped to Pages
+# on this account; nothing else is referenced.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: test -f dist/llms.txt && test -f dist/quickstart/index.html
+      - if: github.event_name != 'pull_request'
+        uses: cloudflare/wrangler-action@ebbaa1584979971c8614a24965b4405ff95890e0 # v4.0.0
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=docs-neosian-com --branch=main --commit-dirty=true
