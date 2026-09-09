@@ -3,7 +3,7 @@
 The [neosian](https://github.com/mausa-ai/neosian) docs, rendered. The site
 has one input: the neosian wheel at the release named in `RELEASE`. The
 build downloads that wheel from PyPI, checks its sha256, and renders the
-pages `neosian docs <topic>` prints — plus `llms.txt`, byte-identical at
+pages `neosian docs <topic>` prints: plus `llms.txt`, byte-identical at
 `/llms.txt`. Nothing is authored here; a correction to a page is a pull
 request to `neosian/assets/docs/` in the library.
 

@@ -14,7 +14,7 @@ const onDisk = readdirSync(`${wheel}/assets/docs`).filter((f) => f.endsWith(".md
 const missing = topics.filter((t) => !onDisk.includes(t));
 const unlisted = onDisk.filter((t) => !topics.includes(t));
 if (missing.length || unlisted.length) {
-  throw new Error(`manifest mismatch — missing: ${missing}, unlisted: ${unlisted}`);
+  throw new Error(`manifest mismatch: missing: ${missing}, unlisted: ${unlisted}`);
 }
 
 const out = "src/content/docs";
@@ -37,7 +37,7 @@ const pages = topics.map((topic) => {
   return { topic, title, summary };
 });
 
-const listing = pages.map((p) => `- [${p.title}](/${p.topic}/) — ${p.summary}`).join("\n");
+const listing = pages.map((p) => `- [${p.title}](/${p.topic}/): ${p.summary}`).join("\n");
 writeFileSync(
   `${out}/index.md`,
   `---
@@ -46,7 +46,7 @@ description: "The pages that ship in the neosian wheel, rendered for release ${r
 ---
 
 These are the pages \`neosian docs <topic>\` prints from the installed wheel,
-rendered here for **neosian ${release}** — the same bytes, so they always
+rendered here for **neosian ${release}**: the same bytes, so they always
 describe the release they came with. Nothing is authored on this site:
 a correction is a pull request to
 [mausa-ai/neosian](https://github.com/mausa-ai/neosian/tree/master/neosian/assets/docs).

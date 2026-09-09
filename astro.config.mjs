@@ -12,7 +12,7 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "neosian",
-      description: `neosian ${release} — the state layer for LLM agents`,
+      description: `neosian ${release}: the state layer for LLM agents`,
       logo: {
         light: "./src/assets/logo-light.svg",
         dark: "./src/assets/logo-dark.svg",
