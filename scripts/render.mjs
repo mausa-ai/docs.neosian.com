@@ -1,6 +1,6 @@
 // build/wheel → the Starlight content tree. Nothing is authored here: each
 // page's frontmatter becomes Starlight's, the H1 the wheel prints goes
-// (Starlight renders the title), the order is the wheel's own manifest —
+// (Starlight renders the title), the order is the wheel's own manifest:
 // a page it lists but does not carry, or carries but does not list, fails.
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, copyFileSync } from "node:fs";
 
