@@ -73,7 +73,70 @@
   }
 }
 
-/* Starlight: the body keeps the wheel's line length readable. */
-.sl-markdown-content {
-  font-size: var(--sl-text-base);
+/* Type: one scale, both sites. The measure is the landing's 17px; the
+ * heading ladder is its own, tightened by a hair of negative tracking.
+ * Starlight's tokens are mapped onto it below, so a docs page and the
+ * landing set the same words the same way. */
+:root {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --text-body: 1.0625rem;
+  --text-lede: 1.15rem;
+  --text-small: 0.95rem;
+  --leading-body: 1.6;
+  --leading-heading: 1.15;
+  --tracking-heading: -0.01em;
+
+  --step-h1: 2.3rem;
+  --step-h2: 1.55rem;
+  --step-h3: 1.25rem;
+  --step-h4: 1.05rem;
+
+  /* Where a line of prose wraps. The panel it sits in is wider. */
+  --measure: 44rem;
+}
+
+@media (max-width: 600px) {
+  :root {
+    --text-body: 1rem;
+    --step-h1: 1.8rem;
+  }
+}
+
+/* Starlight reads the scale. These declarations are deliberately
+ * unlayered: Starlight ships its own in `@layer starlight.base`, and an
+ * unlayered rule beats a layered one whatever the source order, media
+ * query included. */
+:root {
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+
+  --sl-text-body: var(--text-body);
+  --sl-text-body-sm: var(--text-small);
+  --sl-text-code: 0.9em;
+  --sl-text-code-sm: 0.85em;
+  --sl-line-height: var(--leading-body);
+  --sl-line-height-headings: var(--leading-heading);
+
+  --sl-text-h1: var(--step-h1);
+  --sl-text-h2: var(--step-h2);
+  --sl-text-h3: var(--step-h3);
+  --sl-text-h4: var(--step-h4);
+
+  /* The panel is wider than the measure on purpose: prose wraps at
+   * --measure, and the reference tables and code blocks get the room
+   * they need instead of scrolling inside a column sized for sentences. */
+  --sl-content-width: 52rem;
+}
+
+.sl-markdown-content > :is(p, ul, ol, dl, blockquote, h2, h3, h4, h5, h6),
+.content-panel h1 {
+  max-width: var(--measure);
+}
+
+/* Starlight has no tracking token; the page title is not markdown. */
+.sl-markdown-content :is(h1, h2, h3),
+.content-panel h1 {
+  letter-spacing: var(--tracking-heading);
 }
