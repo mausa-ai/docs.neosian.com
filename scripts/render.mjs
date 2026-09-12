@@ -74,22 +74,48 @@ const pages = topics.map((topic) => {
   return { topic, title, label, summary };
 });
 
-const listing = pages.map((p) => `- [${p.title}](/${p.topic}/): ${p.summary}`).join("\n");
+// The index is a splash: the mark, the one thing to know about these
+// bytes, and the ten pages as cards. The cards are raw HTML rather than
+// Starlight's <CardGrid>, which would cost an MDX integration for one
+// grid; src/styles/docs.css dresses them.
+const escape = (t) =>
+  t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const cards = pages
+  .map(
+    (p) =>
+      `  <a class="topic" href="/${p.topic}/">\n` +
+      `    <span class="topic-name">${escape(p.label)}</span>\n` +
+      `    <span class="topic-summary">${escape(p.summary)}</span>\n` +
+      `  </a>`,
+  )
+  .join("\n");
 writeFileSync(
   `${out}/index.md`,
   `---
 title: "neosian docs"
 description: "The pages that ship in the neosian wheel, rendered for release ${release}"
+template: splash
+hero:
+  tagline: "<code>neosian docs &lt;topic&gt;</code> prints these pages from the installed wheel. Rendered here for ${release}: the same bytes, so they always describe the release they came with."
+  image:
+    file: ../../assets/mark.svg
+  actions:
+    - text: Quickstart
+      link: /quickstart/
+      icon: right-arrow
+      variant: primary
+    - text: llms.txt
+      link: /llms.txt
+      icon: document
+      variant: minimal
 ---
 
-These are the pages \`neosian docs <topic>\` prints from the installed wheel,
-rendered here for **neosian ${release}**: the same bytes, so they always
-describe the release they came with. Nothing is authored on this site:
-a correction is a pull request to
+<div class="topics">
+${cards}
+</div>
+
+Nothing is authored on this site: a correction is a pull request to
 [mausa-ai/neosian](https://github.com/mausa-ai/neosian/tree/master/neosian/assets/docs).
-
-${listing}
-
 Agents start at [llms.txt](/llms.txt), the machine-readable front door
 (byte-identical to the wheel's copy). The library is on
 [PyPI](https://pypi.org/project/neosian/) and

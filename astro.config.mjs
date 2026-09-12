@@ -25,7 +25,7 @@ export default defineConfig({
         alt: "neosian",
       },
       favicon: "/favicon.svg",
-      customCss: ["./src/styles/brand.css"],
+      customCss: ["./src/styles/brand.css", "./src/styles/docs.css"],
       // Code is most of a library's docs. The frames stay on the brand
       // (useStarlightUiThemeColors keeps them reading the Starlight
       // tokens brand.css remaps, which supplying `themes` would
