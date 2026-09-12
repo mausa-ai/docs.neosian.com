@@ -17,6 +17,18 @@ if (missing.length || unlisted.length) {
   throw new Error(`manifest mismatch: missing: ${missing}, unlisted: ${unlisted}`);
 }
 
+// A frontmatter scalar carrying a `: ` is quoted (real YAML, as the wheel
+// writes it); the quotes are syntax, not title text.
+const unquote = (value) => {
+  if (value.length > 1 && value.startsWith('"') && value.endsWith('"')) {
+    return JSON.parse(value);
+  }
+  if (value.length > 1 && value.startsWith("'") && value.endsWith("'")) {
+    return value.slice(1, -1).replaceAll("''", "'");
+  }
+  return value;
+};
+
 const out = "src/content/docs";
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
@@ -27,7 +39,7 @@ const pages = topics.map((topic) => {
   const field = (key) => {
     const m = new RegExp(`^${key}: (.*)$`, "m").exec(fm[1]);
     if (!m) throw new Error(`${topic}.md has no ${key}`);
-    return m[1].trim();
+    return unquote(m[1].trim());
   };
   const title = field("title");
   const summary = field("summary");
