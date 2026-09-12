@@ -6,6 +6,10 @@ import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync, copyFileSy
 
 const release = readFileSync("RELEASE", "utf8").trim();
 const wheel = "build/wheel/neosian";
+// Every page links at the bytes it was rendered from, in the repo that
+// owns them: this site authors nothing, so "edit" means edit the wheel.
+const SOURCE =
+  "https://github.com/mausa-ai/neosian/blob/master/neosian/assets/docs";
 const manifest = readFileSync(`${wheel}/_foundation/shared/docs_assets.py`, "utf8");
 const tuple = /_TOPICS: Final = \(([^)]*)\)/.exec(manifest);
 if (!tuple) throw new Error("docs_assets.py carries no _TOPICS tuple");
@@ -15,6 +19,21 @@ const missing = topics.filter((t) => !onDisk.includes(t));
 const unlisted = onDisk.filter((t) => !topics.includes(t));
 if (missing.length || unlisted.length) {
   throw new Error(`manifest mismatch: missing: ${missing}, unlisted: ${unlisted}`);
+}
+
+// Brackets drawn around the wheel's reading order, never a reordering of
+// it: flattened, GROUPS must be the manifest, so a page the wheel gains
+// fails the build here until it is placed. A null label means bare links.
+const GROUPS = [
+  { label: null, topics: ["quickstart"] },
+  { label: "The core", topics: ["agent", "tools"] },
+  { label: "The state", topics: ["memory", "skills"] },
+  { label: "The doors", topics: ["cli", "mcp", "agents"] },
+  { label: "Reference", topics: ["topology", "baselines"] },
+];
+const grouped = GROUPS.flatMap((g) => g.topics);
+if (grouped.join() !== topics.join()) {
+  throw new Error(`GROUPS is not the manifest: ${grouped} vs ${topics}`);
 }
 
 // A frontmatter scalar carrying a `: ` is quoted (real YAML, as the wheel
@@ -43,10 +62,16 @@ const pages = topics.map((topic) => {
   };
   const title = field("title");
   const summary = field("summary");
+  // `Name: the gloss` is the wheel's title shape; the name alone is the
+  // sidebar label, the whole of it stays the H1 and the <title>.
+  const label = title.split(": ")[0];
   const body = text.slice(fm[0].length).replace(/^\s*# .*\n/, "");
-  const head = `---\ntitle: ${JSON.stringify(title)}\ndescription: ${JSON.stringify(summary)}\n---\n\n`;
+  const head =
+    `---\ntitle: ${JSON.stringify(title)}\n` +
+    `description: ${JSON.stringify(summary)}\n` +
+    `editUrl: ${JSON.stringify(`${SOURCE}/${topic}.md`)}\n---\n\n`;
   writeFileSync(`${out}/${topic}.md`, head + body);
-  return { topic, title, summary };
+  return { topic, title, label, summary };
 });
 
 const listing = pages.map((p) => `- [${p.title}](/${p.topic}/): ${p.summary}`).join("\n");
@@ -73,5 +98,14 @@ door for people.
 `,
 );
 copyFileSync(`${wheel}/assets/llms.txt`, "public/llms.txt");
-writeFileSync("build/order.json", JSON.stringify(pages.map(({ topic, title }) => ({ topic, title }))));
+const byTopic = Object.fromEntries(pages.map((p) => [p.topic, p]));
+writeFileSync(
+  "build/order.json",
+  JSON.stringify(
+    GROUPS.map(({ label, topics: group }) => ({
+      label,
+      items: group.map((t) => ({ topic: t, label: byTopic[t].label })),
+    })),
+  ),
+);
 console.log(`rendered ${pages.length} pages + index + llms.txt for ${release}`);

@@ -3,8 +3,13 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import { readFileSync } from "node:fs";
 
-// The sidebar is the wheel's reading order (scripts/render.mjs writes it).
+// The sidebar is the wheel's reading order, bracketed into groups by
+// scripts/render.mjs; a group with no label contributes bare links.
 const order = JSON.parse(readFileSync("build/order.json", "utf8"));
+const entries = order.flatMap(({ label, items }) => {
+  const links = items.map((i) => ({ label: i.label, link: `/${i.topic}/` }));
+  return label ? [{ label, items: links }] : links;
+});
 const release = readFileSync("RELEASE", "utf8").trim();
 
 export default defineConfig({
@@ -27,7 +32,7 @@ export default defineConfig({
       ],
       sidebar: [
         { label: `neosian ${release}`, link: "/" },
-        ...order.map(({ topic, title }) => ({ label: title, link: `/${topic}/` })),
+        ...entries,
         { label: "llms.txt", link: "/llms.txt" },
       ],
       lastUpdated: false,
