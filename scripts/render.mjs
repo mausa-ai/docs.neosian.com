@@ -29,7 +29,7 @@ const GROUPS = [
   { label: "The core", topics: ["agent", "tools"] },
   { label: "The state", topics: ["memory", "skills"] },
   { label: "The doors", topics: ["cli", "mcp", "agents"] },
-  { label: "Reference", topics: ["topology", "baselines"] },
+  { label: "Reference", topics: ["topology", "wire", "baselines"] },
 ];
 const grouped = GROUPS.flatMap((g) => g.topics);
 if (grouped.join() !== topics.join()) {
