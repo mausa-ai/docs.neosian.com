@@ -26,7 +26,7 @@ if (missing.length || unlisted.length) {
 // fails the build here until it is placed. A null label means bare links.
 const GROUPS = [
   { label: null, topics: ["quickstart"] },
-  { label: "The core", topics: ["agent", "tools"] },
+  { label: "The core", topics: ["agent", "local", "tools"] },
   { label: "The state", topics: ["memory", "skills"] },
   { label: "The doors", topics: ["cli", "mcp", "agents"] },
   { label: "Reference", topics: ["topology", "wire", "baselines"] },
@@ -75,7 +75,7 @@ const pages = topics.map((topic) => {
 });
 
 // The index is a splash: the mark, the one thing to know about these
-// bytes, and the ten pages as cards. The cards are raw HTML rather than
+// bytes, and the pages as cards. The cards are raw HTML rather than
 // Starlight's <CardGrid>, which would cost an MDX integration for one
 // grid; src/styles/docs.css dresses them.
 const escape = (t) =>
