@@ -27,8 +27,8 @@ if (missing.length || unlisted.length) {
 const GROUPS = [
   { label: null, topics: ["quickstart"] },
   { label: "The core", topics: ["agent", "local", "tools"] },
-  { label: "The state", topics: ["memory", "skills"] },
-  { label: "The doors", topics: ["cli", "mcp", "agents"] },
+  { label: "The state", topics: ["memory", "skills", "stores"] },
+  { label: "The doors", topics: ["cli", "mcp", "agents", "interop"] },
   { label: "Reference", topics: ["topology", "wire", "baselines"] },
 ];
 const grouped = GROUPS.flatMap((g) => g.topics);
